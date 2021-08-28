@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class Pedido {
 	private Long id;
 	@Column(nullable = false, columnDefinition = "int(1) default 1")
 	@NotNull(message = "Status do pedido não definido.")
+	@ApiModelProperty("Status do pedido: 1-PENDENTE, 2-ATENDIMENTO, 3-FINALIZADO, 4-CANCELADO")
 	private Integer status;
 	@Column(nullable = false)
 	@NotNull(message = "Total do pedido não calculado.")

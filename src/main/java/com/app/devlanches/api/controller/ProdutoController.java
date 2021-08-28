@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.devlanches.api.models.Produto;
 import com.app.devlanches.api.service.ProdutoService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,29 +32,44 @@ public class ProdutoController {
 	private final ProdutoService produtoService;
 	
 	@GetMapping
+	@ApiOperation("Lista todos os Produtos")
 	public List<Produto> getAll() {
 		return produtoService.getAll();
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation("Busca um produto pelo seu código ID")
+	@ApiResponse(code = 404, message = "Produto não encontrado")
 	public Produto getProdutoById(@PathVariable Long id) {
 		return produtoService.getProdutoById(id);
 	}
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@ApiOperation("Salve um Produto")
+	@ApiResponses({ @ApiResponse(code = 201, message = "Produto salvo com sucesso"),
+			@ApiResponse(code = 400, message = "Erro de validação") })
 	public Produto save(@RequestBody @Valid Produto produto) {
 		return produtoService.save(produto);
 				
 	}
 	
 	@PutMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	@ApiOperation("Altera um Produto")
+	@ApiResponses({ @ApiResponse(code = 201, message = "Produto alterado com sucesso"),
+			@ApiResponse(code = 400, message = "Erro de validação"),
+			@ApiResponse(code = 404, message = "Produto não encontrado")})
 	public Produto update(@PathVariable Long id, @RequestBody @Valid Produto produto) {
 		return produtoService.update(id, produto);
 	}
 	
 	@DeleteMapping("/{di}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	@ApiOperation("Deleta um Cliente")
+	@ApiResponses({ @ApiResponse(code = 201, message = "Produto deletado com sucesso"),
+		@ApiResponse(code = 404, message = "Produto não encontrado")})
 	public void delete(@PathVariable Long id) {
-		
+		produtoService.delete(id);
 	}
 }

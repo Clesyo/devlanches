@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class Produto {
 	private BigDecimal valor;
 	@Column(nullable = false)
 	@NotBlank(message = "Informe uma classificação para o produto.")
+	@ApiModelProperty("Classificação do produto ex: BEBIDA, COMIDA, SOBREMESA")
 	private String classificacao;
 	
 	@JsonIgnore

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.service.GestorService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -18,11 +21,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GestorController {
 
-	
 	private final GestorService service;
-	
+
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
+	@ApiOperation("Salve um Gestor")
+	@ApiResponses({ @ApiResponse(code = 201, message = "Gestor salvo com sucesso"),
+			@ApiResponse(code = 400, message = "Erro de validação") })
 	public Gestor salvar(@RequestBody Gestor gestor) {
 		return service.salvar(gestor);
 	}
