@@ -3,8 +3,11 @@ package com.app.devlanches.api.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +28,17 @@ import lombok.RequiredArgsConstructor;
 public class PedidoController {
 
 	private final PedidoService pedidoService;
-
+	private String statusPedido = "";
+	
+	
+	@GetMapping
+	public List<Pedido> getAll() {
+		return pedidoService.findAll();
+	}
+	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public PedidoDetalhadoDTO save(@RequestBody PedidoDTO pedido) {
+	public PedidoDetalhadoDTO save(@RequestBody @Valid PedidoDTO pedido) {
 		return convertPedido(pedidoService.save(pedido));
 	}
 
@@ -38,8 +48,26 @@ public class PedidoController {
 			return ItemPedidoDetalhadoDTO.builder().quantidade(item.getQuantidade())
 					.produto(item.getProduto().getNome()).build();
 		}).collect(Collectors.toList());
+		
+		switch (pedido.getStatus()) {
+		case 1:
+			statusPedido = "PENDENTE";
+			break;
+		case 2:
+			statusPedido = "ATENDIMENTO";
+			break;
+		case 3:
+			statusPedido = "FINALIZADO";
+			break;
+		case 4:
+			statusPedido = "CANCELADO";
+			break;
+
+		default:
+			break;
+		}
 
 		return PedidoDetalhadoDTO.builder().cliente(pedido.getCliente().getNome()).pedido(pedido.getId())
-				.total(pedido.getTotal()).itens(items).build();
+				.total(pedido.getTotal()).itens(items).status(statusPedido).build();
 	}
 }

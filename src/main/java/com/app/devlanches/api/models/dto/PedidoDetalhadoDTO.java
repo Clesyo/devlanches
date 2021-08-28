@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class PedidoDetalhadoDTO {
 
 	private Long pedido;
+	private String status;
 	private String cliente;
 	private BigDecimal total;
 	private List<ItemPedidoDetalhadoDTO> itens;

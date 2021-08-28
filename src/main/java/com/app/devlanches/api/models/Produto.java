@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,10 +30,13 @@ public class Produto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
+	@NotBlank(message = "Informe o nome do produto.")
 	private String nome;
 	@Column(nullable = false)
+	@NotNull(message = "Não é possivel cadastrar produto sem preço.")
 	private BigDecimal valor;
 	@Column(nullable = false)
+	@NotBlank(message = "Informe uma classificação para o produto.")
 	private String classificacao;
 	
 	@JsonIgnore

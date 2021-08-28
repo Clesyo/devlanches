@@ -2,6 +2,8 @@ package com.app.devlanches.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,13 +40,13 @@ public class ClienteController {
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Cliente save(@RequestBody Cliente cliente) {
+	public Cliente save(@RequestBody @Valid Cliente cliente) {
 		return clienteService.save(cliente);
 	}
 	
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public Cliente update(@PathVariable Long id, @RequestBody Cliente cliente) {
+	public Cliente update(@PathVariable Long id, @RequestBody @Valid Cliente cliente) {
 		return clienteService.update(id, cliente);
 	}
 	

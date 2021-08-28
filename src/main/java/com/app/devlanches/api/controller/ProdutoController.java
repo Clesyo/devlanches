@@ -2,6 +2,8 @@ package com.app.devlanches.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,13 +40,13 @@ public class ProdutoController {
 	
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Produto save(@RequestBody Produto produto) {
+	public Produto save(@RequestBody @Valid Produto produto) {
 		return produtoService.save(produto);
 				
 	}
 	
 	@PutMapping("/{id}")
-	public Produto update(@PathVariable Long id, @RequestBody Produto produto) {
+	public Produto update(@PathVariable Long id, @RequestBody @Valid Produto produto) {
 		return produtoService.update(id, produto);
 	}
 	

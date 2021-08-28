@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,8 +33,10 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false, columnDefinition = "int(1) default 1")
+	@NotNull(message = "Status do pedido não definido.")
 	private Integer status;
 	@Column(nullable = false)
+	@NotNull(message = "Total do pedido não calculado.")
 	private BigDecimal total;
 	
 	@ManyToOne
