@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.app.devlanches.api.enums.StatusPedido;
 import com.app.devlanches.api.exception.ApiException;
 import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.models.ItemPedido;
@@ -38,18 +40,49 @@ public class PedidoService {
 	public Pedido save(PedidoDTO pedidoDto) {
 		Cliente cliente = clienteService.getClienteById(pedidoDto.getCliente());
 
-
 		pedidoDto.getItens().forEach(dto -> {
 			Produto produto = produtoService.getProdutoById(dto.getProduto());
 			total += (produto.getValor().doubleValue() * dto.getQuantidade());
 		});
-		Pedido pedidoBuilder = Pedido.builder().status(1).total(BigDecimal.valueOf(total)).cliente(cliente).build();
+		Pedido pedidoBuilder = Pedido.builder().status(StatusPedido.PENDENTE).total(BigDecimal.valueOf(total))
+				.cliente(cliente).build();
 
 		Pedido pedido = pedidoRepository.save(pedidoBuilder);
 		List<ItemPedido> listItemPedido = convertItems(pedido, pedidoDto.getItens());
 		itemPedidoService.saveAll(listItemPedido);
 		pedido.setItemPedidos(listItemPedido);
 		return pedido;
+	}
+
+	public List<Pedido> getPedidoByIdCliente(Long id) {
+		return pedidoRepository.findByIdCliente(id);
+	}
+
+	@Transactional
+	public void cancelaPedido(Long id) {
+
+		pedidoRepository.findById(id).map(pedido -> {
+			/*
+			 * Caso o pedido tenha o status diferente de PENDENTE, é lançado uma exceção
+			 */
+			if (pedido.getStatus() != StatusPedido.PENDENTE) {
+				throw new ApiException("Pedido não pode ser cancelado.");
+			}
+			/*
+			 * Muda status do pedido para CANCELADO
+			 */
+			pedido.setStatus(StatusPedido.CANCELADO);
+			return pedidoRepository.save(pedido);
+		}).orElseThrow(() -> new ApiException("Pedido não encontrado."));
+	
+	}
+
+	@Transactional
+	public void mudaStatuPedido(Long id, StatusPedido status) {
+		pedidoRepository.findById(id).map(pedido -> {
+			pedido.setStatus(status);
+			return pedidoRepository.save(pedido);
+		}).orElseThrow(() -> new ApiException("Pedido não encontrado."));
 	}
 
 	private Pedido findOrFail(Long id) {
