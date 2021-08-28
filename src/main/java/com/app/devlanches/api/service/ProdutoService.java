@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.app.devlanches.api.exception.ApiException;
+import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Produto;
 import com.app.devlanches.api.repository.ProdutoRepository;
 
@@ -44,6 +44,6 @@ public class ProdutoService {
 	}
 
 	private Produto findOrFail(Long id) {
-		return produtoRepository.findById(id).orElseThrow(() -> new ApiException("Produto não encontrado"));
+		return produtoRepository.findById(id).orElseThrow(() -> new EntityNotExist("Produto não encontrado"));
 	}
 }

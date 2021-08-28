@@ -1,17 +1,15 @@
 package com.app.devlanches.api.exception;
 
-public class ApiException extends RuntimeException{
+public class EntityNotExist extends ApiException{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public ApiException(String message) {
-		super(message);
+	
+	public EntityNotExist(String messagem) {
 		// TODO Auto-generated constructor stub
+		super(messagem);
 	}
-	
-	
 
 }

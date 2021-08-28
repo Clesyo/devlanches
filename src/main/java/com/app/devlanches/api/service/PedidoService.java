@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.devlanches.api.enums.StatusPedido;
-import com.app.devlanches.api.exception.ApiException;
+import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.models.ItemPedido;
 import com.app.devlanches.api.models.Pedido;
@@ -66,14 +66,14 @@ public class PedidoService {
 			 * Caso o pedido tenha o status diferente de PENDENTE, é lançado uma exceção
 			 */
 			if (pedido.getStatus() != StatusPedido.PENDENTE) {
-				throw new ApiException("Pedido não pode ser cancelado.");
+				throw new EntityNotExist("Pedido não pode ser cancelado.");
 			}
 			/*
 			 * Muda status do pedido para CANCELADO
 			 */
 			pedido.setStatus(StatusPedido.CANCELADO);
 			return pedidoRepository.save(pedido);
-		}).orElseThrow(() -> new ApiException("Pedido não encontrado."));
+		}).orElseThrow(() -> new EntityNotExist("Pedido não encontrado."));
 	
 	}
 
@@ -82,17 +82,17 @@ public class PedidoService {
 		pedidoRepository.findById(id).map(pedido -> {
 			pedido.setStatus(status);
 			return pedidoRepository.save(pedido);
-		}).orElseThrow(() -> new ApiException("Pedido não encontrado."));
+		}).orElseThrow(() -> new EntityNotExist("Pedido não encontrado."));
 	}
 
 	private Pedido findOrFail(Long id) {
-		return pedidoRepository.findById(id).orElseThrow(() -> new ApiException("Pedido não encontrado."));
+		return pedidoRepository.findById(id).orElseThrow(() -> new EntityNotExist("Pedido não encontrado."));
 	}
 
 	private List<ItemPedido> convertItems(Pedido pedido, List<ItemPedidoDTO> items) {
 
 		if (items.isEmpty()) {
-			throw new ApiException("Não é possivel fazer pedido sem itens.");
+			throw new EntityNotExist("Não é possivel fazer pedido sem itens.");
 		}
 
 		return items.stream().map(itemDto -> {

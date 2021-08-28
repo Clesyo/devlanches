@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.app.devlanches.api.exception.ApiException;
+import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.repository.ClienteRepository;
 
@@ -25,7 +25,7 @@ public class ClienteService {
 		Cliente clienteByEmail = getClienteByEmail(cliente.getEmail());
 
 		if(clienteByEmail != null) {
-			throw new ApiException("Email já está sendo usado.");
+			throw new EntityNotExist("Email já está sendo usado.");
 		}
 		
 		return clienteRepository.save(cliente);
@@ -47,7 +47,7 @@ public class ClienteService {
 	}
 	
 	private Cliente findOrFail(Long id) {
-		return clienteRepository.findById(id).orElseThrow(() -> new ApiException("Cliente não encontrado."));
+		return clienteRepository.findById(id).orElseThrow(() -> new EntityNotExist("Cliente não encontrado."));
 	}
 	
 	private Cliente getClienteByEmail(String email) {

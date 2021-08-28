@@ -3,6 +3,7 @@ package com.app.devlanches.api.service;
 import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.ApiException;
+import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.repository.GestorRepository;
 

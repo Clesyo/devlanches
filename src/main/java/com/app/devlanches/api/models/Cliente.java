@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,7 +30,7 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false)
-	@NotBlank(message = "Compo Nome deve ser preenchido")
+	@NotEmpty(message = "Compo Nome deve ser preenchido")
 	private String nome;
 	@Column(nullable = false)
 	@NotBlank(message = "Compo Nascimento deve ser preenchido")
