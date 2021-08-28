@@ -1,5 +1,7 @@
 package com.app.devlanches.api.service;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,17 @@ public class ClienteService {
 
 	private final ClienteRepository clienteRepository;
 	
+	public List<Cliente> findAll() {
+		return clienteRepository.findAll();
+	}
+	
 	public Cliente save(Cliente cliente) {
+		Cliente clienteByEmail = getClienteByEmail(cliente.getEmail());
+
+		if(clienteByEmail != null) {
+			throw new ApiException("Email já está sendo usado.");
+		}
+		
 		return clienteRepository.save(cliente);
 	}
 	
@@ -37,4 +49,9 @@ public class ClienteService {
 	private Cliente findOrFail(Long id) {
 		return clienteRepository.findById(id).orElseThrow(() -> new ApiException("Cliente não encontrado."));
 	}
+	
+	private Cliente getClienteByEmail(String email) {
+		return clienteRepository.findByEmail(email);
+	}
+
 }

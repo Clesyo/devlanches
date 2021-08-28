@@ -1,5 +1,6 @@
 package com.app.devlanches.api.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ public class PedidoService {
 	private final ProdutoService produtoService;
 	private final ClienteService clienteService;
 	private final ItemPedidoService itemPedidoService;
+	private double total = 0;
 
 	public List<Pedido> findAll() {
 		return pedidoRepository.findAll();
@@ -35,8 +37,13 @@ public class PedidoService {
 
 	public Pedido save(PedidoDTO pedidoDto) {
 		Cliente cliente = clienteService.getClienteById(pedidoDto.getCliente());
-		Pedido pedidoBuilder = Pedido.builder().status(pedidoDto.getStatus()).total(pedidoDto.getTotal())
-				.cliente(cliente).build();
+
+
+		pedidoDto.getItens().forEach(dto -> {
+			Produto produto = produtoService.getProdutoById(dto.getProduto());
+			total += (produto.getValor().doubleValue() * dto.getQuantidade());
+		});
+		Pedido pedidoBuilder = Pedido.builder().status(1).total(BigDecimal.valueOf(total)).cliente(cliente).build();
 
 		Pedido pedido = pedidoRepository.save(pedidoBuilder);
 		List<ItemPedido> listItemPedido = convertItems(pedido, pedidoDto.getItens());
@@ -56,7 +63,7 @@ public class PedidoService {
 		}
 
 		return items.stream().map(itemDto -> {
-			Produto produto = produtoService.getClienteById(itemDto.getProduto());
+			Produto produto = produtoService.getProdutoById(itemDto.getProduto());
 			return ItemPedido.builder().pedido(pedido).produto(produto).quantidade(itemDto.getQuantidade()).build();
 		}).collect(Collectors.toList());
 	}

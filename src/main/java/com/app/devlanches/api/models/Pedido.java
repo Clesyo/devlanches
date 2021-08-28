@@ -31,8 +31,8 @@ public class Pedido {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
-	private String status;
+	@Column(nullable = false, columnDefinition = "int(1) default 1")
+	private Integer status;
 	@Column(nullable = false)
 	private BigDecimal total;
 	

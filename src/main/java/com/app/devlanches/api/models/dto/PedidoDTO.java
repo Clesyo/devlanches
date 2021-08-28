@@ -8,9 +8,6 @@ import lombok.Data;
 @Data
 public class PedidoDTO {
 
-	private Integer quantidade;
-	private String status;
-	private BigDecimal total;
 	private Long cliente;
 	
 	private List<ItemPedidoDTO> itens;

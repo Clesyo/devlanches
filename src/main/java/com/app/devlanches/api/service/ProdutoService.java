@@ -17,15 +17,17 @@ public class ProdutoService {
 
 	private final ProdutoRepository produtoRepository;
 
-	public List<Produto> findAll() {
+	public List<Produto> getAll() {
 		return produtoRepository.findAll();
 	}
 
-	public Produto getClienteById(Long id) {
+	public Produto getProdutoById(Long id) {
 		return findOrFail(id);
 	}
 
 	public Produto save(Produto produto) {
+		String classificacao = produto.getClassificacao().toUpperCase();
+		produto.setClassificacao(classificacao);
 		return produtoRepository.save(produto);
 	}
 
