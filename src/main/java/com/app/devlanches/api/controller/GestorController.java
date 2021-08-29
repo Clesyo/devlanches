@@ -1,5 +1,7 @@
 package com.app.devlanches.api.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +30,7 @@ public class GestorController {
 	@ApiOperation("Salve um Gestor")
 	@ApiResponses({ @ApiResponse(code = 201, message = "Gestor salvo com sucesso"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
-	public Gestor salvar(@RequestBody Gestor gestor) {
+	public Gestor salvar(@RequestBody @Valid Gestor gestor) {
 		return service.salvar(gestor);
 	}
 }
