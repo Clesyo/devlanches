@@ -9,6 +9,9 @@ public class Field {
 		this.field = field;
 		this.message = message;
 	}
+	public Field(String message) {
+		this.message = message;
+	}
 
 	public String getField() {
 		return field;

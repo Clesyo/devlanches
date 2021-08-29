@@ -1,9 +1,10 @@
 package com.app.devlanches.api.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.ApiException;
-import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.repository.GestorRepository;
 
@@ -22,6 +23,10 @@ public class GestorService {
 			return gestorRepository.save(gestor);
 		}
 		throw new ApiException("Registor de Gestor já atigu o limite.");
+	}
+	
+	public List<Gestor> getAll() {
+		return gestorRepository.findAll();
 	}
 	
 }

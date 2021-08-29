@@ -1,6 +1,7 @@
 package com.app.devlanches.api.exception.handler;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +14,7 @@ public class ProblemException {
 	private OffsetDateTime dateTime;
 	private String message;
 	private List<Field> fields;
+
 	
 	public Integer getStatus() {
 		return status;
