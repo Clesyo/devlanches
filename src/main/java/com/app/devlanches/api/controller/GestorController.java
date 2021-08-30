@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class GestorController {
 
 	private final GestorService service;
+	private final PasswordEncoder encode;
 
 	@GetMapping
 	@ApiOperation("Busca todos os gestores")
@@ -44,6 +46,8 @@ public class GestorController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Gestor salvo com sucesso"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
 	public GestorDTO salvar(@RequestBody @Valid Gestor gestor) {
+		String senha = encode.encode(gestor.getSenha());
+		gestor.setSenha(senha);
 		return GestorDTO.convertToDto(service.salvar(gestor));
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.ApiException;
+import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.repository.GestorRepository;
 
@@ -29,4 +30,7 @@ public class GestorService {
 		return gestorRepository.findAll();
 	}
 	
+	public Gestor findByEmail(String emial) {
+		return gestorRepository.findByEmail(emial).orElseThrow(() -> new EntityNotExist("Gestor não encontrado."));
+	}
 }
