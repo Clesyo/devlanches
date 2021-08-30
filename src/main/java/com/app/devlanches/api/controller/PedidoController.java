@@ -24,6 +24,7 @@ import com.app.devlanches.api.models.dto.StatusPedidoDTO;
 import com.app.devlanches.api.service.PedidoService;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,16 @@ public class PedidoController {
 			return PedidoDetalhadoDTO.convertPedido(pedido);
 		}).collect(Collectors.toList());
 	}
-
+	
+	@GetMapping("/cliente/{id}")
+	@ApiOperation("Lista todos pedidos de um cliente")
+	public List<PedidoDetalhadoDTO> getPedidoByIdCliente(@PathVariable @ApiParam("ID do cliente") Long id) {
+		List<Pedido> pedidos = pedidoService.getPedidoByIdCliente(id);
+		
+		return pedidos.stream().map(pedido -> {
+			return PedidoDetalhadoDTO.convertPedido(pedido);
+		}).collect(Collectors.toList());
+	}
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@ApiOperation("Cria um novo pedido")
@@ -55,18 +65,20 @@ public class PedidoController {
 
 	@PatchMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	@ApiResponses({ @ApiResponse(code = 204, message = "Pedido alterado com sucesso"),
+	@ApiOperation("Altera o status de um pedido")
+	@ApiResponses({ @ApiResponse(code = 204, message = "Status de pedido alterado com sucesso"),
 			@ApiResponse(code = 404, message = "Pedido não encontrado"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
-	public void updateStatus(@PathVariable Long id, @RequestBody StatusPedidoDTO status) {
+	public void updateStatus(@PathVariable @ApiParam("ID do pedido") Long id, @RequestBody StatusPedidoDTO status) {
 		pedidoService.mudaStatuPedido(id, StatusPedido.valueOf(status.getStatus().toUpperCase()));
 	}
 	
 	@PatchMapping("/{id}/cancelar")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	@ApiOperation("Muda o status de um pedido para cancelado")
 	@ApiResponses({ @ApiResponse(code = 204, message = "Pedido alterado com sucesso"),
 		@ApiResponse(code = 404, message = "Pedido não encontrado")})
-	public void updateStatus(@PathVariable Long id) {
+	public void updateStatus(@PathVariable @ApiParam("ID do pedido") Long id) {
 		pedidoService.cancelaPedido(id);
 	}
 

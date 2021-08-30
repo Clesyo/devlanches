@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.app.devlanches.api.exception.ApiException;
 import com.app.devlanches.api.exception.EntityNotExist;
+import com.app.devlanches.api.exception.PasswordInvalidException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -34,6 +35,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<Object> handleApiException(ApiException ex, WebRequest web) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		return handleExceptionInternal(ex, getProblem(ex, status), new HttpHeaders(), status, web);
+	}
+	@ExceptionHandler(PasswordInvalidException.class)
+	public ResponseEntity<Object> handlePasswordInvalidException(PasswordInvalidException ex, WebRequest web) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		return handleExceptionInternal(ex, getProblem(ex, status), new HttpHeaders(), status, web);
 	}

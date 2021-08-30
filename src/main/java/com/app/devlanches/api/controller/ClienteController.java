@@ -41,16 +41,6 @@ public class ClienteController {
 	public List<Cliente> findAll() {
 		return clienteService.findAll();
 	}
-	@GetMapping("/{id}/pedidos")
-	@ApiOperation("Lista todos pedidos de um cliente")
-	public List<PedidoDetalhadoDTO> getPedidos(@PathVariable Long id) {
-		List<Pedido> pedidos = pedidoService.getPedidoByIdCliente(id);
-		
-		return pedidos.stream().map(pedido -> {
-			return PedidoDetalhadoDTO.convertPedido(pedido);
-		}).collect(Collectors.toList());
-	}
-	
 	
 	@GetMapping("/{id}")
 	@ApiOperation("Busca um cliente pelo seu código ID")

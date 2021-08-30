@@ -8,6 +8,6 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String index() {
-		return "<h1>Bem vindo ao Api - Dev Lanches</h1>";
+		return "<h1>Bem vindo a API - Dev Lanches</h1>";
 	}
 }

@@ -32,11 +32,11 @@ public class ApiUserDetailService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String emial) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		Gestor gestor = gestorService.findByEmail(emial);
+		Gestor gestor = gestorService.findByEmail(email);
 
-		return UserCustom.builder().password(gestor.getSenha()).username(gestor.getEmail()).build();
+		return UserCustom.builder().password(gestor.getSenha()).username(gestor.getEmail()).roles("ADMIN").build();
 	}
 
 }
