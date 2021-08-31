@@ -30,7 +30,7 @@ public class JwtService {
 		Date date = Date.from(instant);
 
 		return Jwts.builder().setSubject(gestor.getEmail()).setExpiration(date)
-				.signWith(SignatureAlgorithm.ES512, this.signKey).compact();
+				.signWith(SignatureAlgorithm.HS512, this.signKey).compact();
 	}
 
 	private Claims obtainClaims(String token) throws ExpiredJwtException {
