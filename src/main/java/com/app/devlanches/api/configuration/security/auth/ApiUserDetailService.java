@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +17,16 @@ public class ApiUserDetailService implements UserDetailsService {
 
 	@Autowired
 	private GestorService gestorService;
+	private PasswordEncoder encode = new BCryptPasswordEncoder();
 
-	@Autowired
-	private PasswordEncoder encoder;
+	public ApiUserDetailService(GestorService gestorService) {
+		this.gestorService = gestorService;
+	}
 
 	public UserDetails authenticate(Gestor gestor) {
 
 		UserDetails userLogin = loadUserByUsername(gestor.getEmail());
-		boolean isValidPassword = encoder.matches(gestor.getSenha(), userLogin.getPassword());
+		boolean isValidPassword = encode.matches(gestor.getSenha(), userLogin.getPassword());
 
 		if (isValidPassword) {
 			return userLogin;

@@ -20,16 +20,8 @@ import com.app.devlanches.api.enums.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Builder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "pedidos")
 public class Pedido {
 
@@ -44,12 +36,69 @@ public class Pedido {
 	@Column(nullable = false)
 	@NotNull(message = "Total do pedido não calculado.")
 	private BigDecimal total;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> itemPedidos;
+
+	public Pedido() {
+	}
+
+	public Pedido(StatusPedido status, BigDecimal total) {
+		super();
+		this.status = status;
+		this.total = total;
+	}
+
+	public Pedido(StatusPedido status, BigDecimal total, Cliente cliente) {
+		super();
+		this.status = status;
+		this.total = total;
+		this.cliente = cliente;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<ItemPedido> getItemPedidos() {
+		return itemPedidos;
+	}
+
+	public void setItemPedidos(List<ItemPedido> itemPedidos) {
+		this.itemPedidos = itemPedidos;
+	}
+
 }

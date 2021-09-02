@@ -2,19 +2,22 @@ package com.app.devlanches.api.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.models.ItemPedido;
 import com.app.devlanches.api.repository.ItemPedidoRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class ItemPedidoService {
 
-	private final ItemPedidoRepository itemPedidoRepository;
+	@Autowired
+	private  ItemPedidoRepository itemPedidoRepository;
 	
+	public ItemPedidoService(ItemPedidoRepository itemPedidoRepository) {
+		this.itemPedidoRepository = itemPedidoRepository;
+	}
+
 	public ItemPedido save(ItemPedido itemPedido) {
 		return itemPedidoRepository.save(itemPedido);
 	}

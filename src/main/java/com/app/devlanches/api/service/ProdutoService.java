@@ -3,19 +3,23 @@ package com.app.devlanches.api.service;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Produto;
 import com.app.devlanches.api.repository.ProdutoRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class ProdutoService {
 
-	private final ProdutoRepository produtoRepository;
+	@Autowired
+	private  ProdutoRepository produtoRepository;
+	
+	public ProdutoService(ProdutoRepository produtoRepository) {
+		super();
+		this.produtoRepository = produtoRepository;
+	}
 
 	public List<Produto> getAll() {
 		return produtoRepository.findAll();
@@ -26,8 +30,6 @@ public class ProdutoService {
 	}
 
 	public Produto save(Produto produto) {
-		String classificacao = produto.getClassificacao().toUpperCase();
-		produto.setClassificacao(classificacao);
 		return produtoRepository.save(produto);
 	}
 

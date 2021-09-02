@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +28,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(path = "/pedido", produces = MediaType.APPLICATION_JSON_VALUE)
-@RequiredArgsConstructor
 public class PedidoController {
 
-	private final PedidoService pedidoService;
+	@Autowired
+	private  PedidoService pedidoService;
+	
+	public PedidoController(PedidoService pedidoService) {
+		this.pedidoService = pedidoService;
+	}
 
 	@GetMapping
 	@ApiOperation("Lista todos os pedidos")

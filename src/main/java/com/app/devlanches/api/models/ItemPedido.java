@@ -10,15 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "item_pedido")
 public class ItemPedido {
@@ -34,4 +25,61 @@ public class ItemPedido {
 	@ManyToOne
 	@JoinColumn(name = "produto_id")
 	private Produto produto;
+	
+	public ItemPedido() {
+	}
+
+	public ItemPedido(Long id, Pedido pedido, Integer quantidade, Produto produto) {
+		super();
+		this.id = id;
+		this.pedido = pedido;
+		this.quantidade = quantidade;
+		this.produto = produto;
+	}
+
+	public ItemPedido(Pedido pedido, Integer quantidade, Produto produto) {
+		super();
+		this.pedido = pedido;
+		this.quantidade = quantidade;
+		this.produto = produto;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+	
+	
+
+	
+	
+	
+	
 }

@@ -26,6 +26,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtService jwtService;
 
+	public SecurityConfig(ApiUserDetailService userDetailService, JwtService jwtService) {
+		this.userDetailService = userDetailService;
+		this.jwtService = jwtService;
+	}
+
 	private String[] urls = { "/v2/api-docs", "configuration/ui", "/swagger-resources/**", "/configuration/security",
 			"/swagger-ui.html", "/webjars/**" };
 

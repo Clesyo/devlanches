@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +18,26 @@ import com.app.devlanches.api.models.dto.ItemPedidoDTO;
 import com.app.devlanches.api.models.dto.PedidoDTO;
 import com.app.devlanches.api.repository.PedidoRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class PedidoService {
 
-	private final PedidoRepository pedidoRepository;
-	private final ProdutoService produtoService;
-	private final ClienteService clienteService;
-	private final ItemPedidoService itemPedidoService;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private ProdutoService produtoService;
+	@Autowired
+	private ClienteService clienteService;
+	@Autowired
+	private ItemPedidoService itemPedidoService;
+
+	public PedidoService(PedidoRepository pedidoRepository, ProdutoService produtoService,
+			ClienteService clienteService, ItemPedidoService itemPedidoService) {
+		this.pedidoRepository = pedidoRepository;
+		this.produtoService = produtoService;
+		this.clienteService = clienteService;
+		this.itemPedidoService = itemPedidoService;
+	}
+
 	private double total = 0;
 
 	public List<Pedido> findAll() {
@@ -44,8 +55,7 @@ public class PedidoService {
 			Produto produto = produtoService.getProdutoById(dto.getProduto());
 			total += (produto.getValor().doubleValue() * dto.getQuantidade());
 		});
-		Pedido pedidoBuilder = Pedido.builder().status(StatusPedido.PENDENTE).total(BigDecimal.valueOf(total))
-				.cliente(cliente).build();
+		Pedido pedidoBuilder = new Pedido(StatusPedido.PENDENTE, BigDecimal.valueOf(total), cliente);
 
 		Pedido pedido = pedidoRepository.save(pedidoBuilder);
 		List<ItemPedido> listItemPedido = convertItems(pedido, pedidoDto.getItens());
@@ -74,7 +84,7 @@ public class PedidoService {
 			pedido.setStatus(StatusPedido.CANCELADO);
 			return pedidoRepository.save(pedido);
 		}).orElseThrow(() -> new EntityNotExist("Pedido não encontrado."));
-	
+
 	}
 
 	@Transactional
@@ -97,7 +107,7 @@ public class PedidoService {
 
 		return items.stream().map(itemDto -> {
 			Produto produto = produtoService.getProdutoById(itemDto.getProduto());
-			return ItemPedido.builder().pedido(pedido).produto(produto).quantidade(itemDto.getQuantidade()).build();
+			return new ItemPedido(pedido, itemDto.getQuantidade(), produto);
 		}).collect(Collectors.toList());
 	}
 }

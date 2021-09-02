@@ -3,20 +3,24 @@ package com.app.devlanches.api.service;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.devlanches.api.exception.ApiException;
 import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.repository.ClienteRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class ClienteService {
 
-	private final ClienteRepository clienteRepository;
+	@Autowired
+	private  ClienteRepository clienteRepository;
 	
+	public ClienteService(ClienteRepository clienteRepository) {
+		this.clienteRepository = clienteRepository;
+	}
+
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
 	}
@@ -25,7 +29,7 @@ public class ClienteService {
 		Cliente clienteByEmail = getClienteByEmail(cliente.getEmail());
 
 		if(clienteByEmail != null) {
-			throw new EntityNotExist("Email já está sendo usado.");
+			throw new ApiException("Email já está sendo usado.");
 		}
 		
 		return clienteRepository.save(cliente);

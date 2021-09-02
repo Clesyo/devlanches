@@ -1,16 +1,33 @@
 package com.app.devlanches.api.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class ItemPedidoDetalhadoDTO {
 
 	private Integer quantidade;
 	private String produto;
+
+	public ItemPedidoDetalhadoDTO() {
+	}
+
+	public ItemPedidoDetalhadoDTO(Integer quantidade, String produto) {
+		super();
+		this.quantidade = quantidade;
+		this.produto = produto;
+	}
+
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public String getProduto() {
+		return produto;
+	}
+
+	public void setProduto(String produto) {
+		this.produto = produto;
+	}
+
 }

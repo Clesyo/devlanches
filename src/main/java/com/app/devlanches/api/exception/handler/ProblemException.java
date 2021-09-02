@@ -1,7 +1,6 @@
 package com.app.devlanches.api.exception.handler;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;

@@ -11,19 +11,24 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "gestores")
 public class Gestor {
-
+	
+	public Gestor() {
+	}
+	
+	public Gestor(String nome,String email,String senha) {
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+	}
+	
+	public  Gestor(String email, String senha) {
+		this.email = email;
+		this.senha = senha;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonIgnore
@@ -38,4 +43,39 @@ public class Gestor {
 	@Column(nullable = false)
 	@NotBlank(message = "Senha deve deve ser informada.")
 	private String senha;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
+	
+	
 }
