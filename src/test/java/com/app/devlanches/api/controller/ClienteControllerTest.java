@@ -1,5 +1,6 @@
 package com.app.devlanches.api.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,6 +29,7 @@ import com.app.devlanches.api.configuration.security.auth.jwt.JwtService;
 import com.app.devlanches.api.controller.mock.ClienteMock;
 import com.app.devlanches.api.controller.mock.GestorMock;
 import com.app.devlanches.api.repository.ClienteRepository;
+import com.app.devlanches.api.service.ClienteService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,11 +53,12 @@ class ClienteControllerTest {
 	private String token;
 
 	@MockBean
-	private ClienteRepository clienteRepository;
+	private ClienteService clienteService;
 
 	@BeforeAll
 	public void setup() {
-		doReturn(ClienteMock.getData()).when(clienteRepository).findById(ClienteMock.getData().get().getId());
+		//doReturn(ClienteMock.getData()).when(clienteRepository).findById(ClienteMock.getDataWithId().get().getId());
+		when(clienteService.findById(ClienteMock.getDataWithId().get().getId())).thenReturn(ClienteMock.getData().get());
 		token = jwtService.gerarToken(GestorMock.allData());
 	}
 
@@ -69,8 +72,8 @@ class ClienteControllerTest {
 	@Test
 	@DisplayName(value = "Retorna um cliente através do seu codigo ID")
 	public void returnClienteById() throws Exception {
-		mockMvc.perform(get(URL_PARAM,"id","1").header("Authorization", "Bearer " + token)
-				.accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk());
+		assertNotNull(token);
+		mockMvc.perform(get(URL_PARAM, 1L).header("Authorization", "Bearer "+token)).andExpect(status().isOk());
 		
 	}
 

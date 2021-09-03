@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.devlanches.api.enums.StatusPedido;
+import com.app.devlanches.api.exception.ApiException;
 import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.impl.IPedidoService;
 import com.app.devlanches.api.models.Cliente;
@@ -30,14 +31,6 @@ public class PedidoService implements IPedidoService{
 	private ClienteService clienteService;
 	@Autowired
 	private ItemPedidoService itemPedidoService;
-
-	public PedidoService(PedidoRepository pedidoRepository, ProdutoService produtoService,
-			ClienteService clienteService, ItemPedidoService itemPedidoService) {
-		this.pedidoRepository = pedidoRepository;
-		this.produtoService = produtoService;
-		this.clienteService = clienteService;
-		this.itemPedidoService = itemPedidoService;
-	}
 
 	private double total = 0;
 
@@ -82,7 +75,7 @@ public class PedidoService implements IPedidoService{
 			 * Caso o pedido tenha o status diferente de PENDENTE, é lançado uma exceção
 			 */
 			if (pedido.getStatus() != StatusPedido.PENDENTE) {
-				throw new EntityNotExist("Pedido não pode ser cancelado.");
+				throw new ApiException("Pedido não pode ser cancelado.");
 			}
 			/*
 			 * Muda status do pedido para CANCELADO
@@ -109,7 +102,7 @@ public class PedidoService implements IPedidoService{
 	private List<ItemPedido> convertItems(Pedido pedido, List<ItemPedidoDTO> items) {
 
 		if (items.isEmpty()) {
-			throw new EntityNotExist("Não é possivel fazer pedido sem itens.");
+			throw new ApiException("Não é possivel fazer pedido sem itens.");
 		}
 
 		return items.stream().map(itemDto -> {
