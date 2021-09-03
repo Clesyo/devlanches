@@ -25,7 +25,7 @@ public class GestorDTO {
 	}
 
 	public static GestorDTO convertToDto(Gestor gestor) {
-		return new GestorDTO(gestor.getNome(), gestor.getEmail());
+		return new GestorDTO(gestor.getId(), gestor.getNome(), gestor.getEmail());
 	}
 
 	public Long getId() {

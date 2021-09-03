@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -42,6 +44,7 @@ public class Gestor {
 	private String email;
 	@Column(nullable = false)
 	@NotBlank(message = "Senha deve deve ser informada.")
+	@Length(min = 8, message = "Informe uma senha de minimo 8 caracteres")
 	private String senha;
 	
 	public Long getId() {

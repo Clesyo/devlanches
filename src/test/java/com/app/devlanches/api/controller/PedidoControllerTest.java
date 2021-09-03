@@ -26,7 +26,6 @@ import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.models.Produto;
 import com.app.devlanches.api.repository.PedidoRepository;
 import com.app.devlanches.api.service.ClienteService;
-import com.app.devlanches.api.service.PedidoService;
 import com.app.devlanches.api.service.ProdutoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
