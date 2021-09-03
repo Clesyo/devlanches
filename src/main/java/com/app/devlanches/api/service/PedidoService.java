@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.devlanches.api.enums.StatusPedido;
 import com.app.devlanches.api.exception.EntityNotExist;
+import com.app.devlanches.api.impl.IPedidoService;
 import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.models.ItemPedido;
 import com.app.devlanches.api.models.Pedido;
@@ -19,7 +20,7 @@ import com.app.devlanches.api.models.dto.PedidoDTO;
 import com.app.devlanches.api.repository.PedidoRepository;
 
 @Service
-public class PedidoService {
+public class PedidoService implements IPedidoService{
 
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -40,19 +41,22 @@ public class PedidoService {
 
 	private double total = 0;
 
+	@Override
 	public List<Pedido> findAll() {
 		return pedidoRepository.findAll();
 	}
 
-	public Pedido getPedidoById(Long id) {
+	@Override
+	public Pedido findById(Long id) {
 		return findOrFail(id);
 	}
 
+	@Override
 	public Pedido save(PedidoDTO pedidoDto) {
-		Cliente cliente = clienteService.getClienteById(pedidoDto.getCliente());
+		Cliente cliente = clienteService.findById(pedidoDto.getCliente());
 
 		pedidoDto.getItens().forEach(dto -> {
-			Produto produto = produtoService.getProdutoById(dto.getProduto());
+			Produto produto = produtoService.findById(dto.getProduto());
 			total += (produto.getValor().doubleValue() * dto.getQuantidade());
 		});
 		Pedido pedidoBuilder = new Pedido(StatusPedido.PENDENTE, BigDecimal.valueOf(total), cliente);
@@ -64,12 +68,14 @@ public class PedidoService {
 		return pedido;
 	}
 
-	public List<Pedido> getPedidoByIdCliente(Long id) {
+	@Override
+	public List<Pedido> findByIdCliente(Long id) {
 		return pedidoRepository.findByIdCliente(id);
 	}
 
 	@Transactional
-	public void cancelaPedido(Long id) {
+	@Override
+	public void cancelPedido(Long id) {
 
 		pedidoRepository.findById(id).map(pedido -> {
 			/*
@@ -88,7 +94,8 @@ public class PedidoService {
 	}
 
 	@Transactional
-	public void mudaStatuPedido(Long id, StatusPedido status) {
+	@Override
+	public void changeStatusPedido(Long id, StatusPedido status) {
 		pedidoRepository.findById(id).map(pedido -> {
 			pedido.setStatus(status);
 			return pedidoRepository.save(pedido);
@@ -106,7 +113,7 @@ public class PedidoService {
 		}
 
 		return items.stream().map(itemDto -> {
-			Produto produto = produtoService.getProdutoById(itemDto.getProduto());
+			Produto produto = produtoService.findById(itemDto.getProduto());
 			return new ItemPedido(pedido, itemDto.getQuantidade(), produto);
 		}).collect(Collectors.toList());
 	}

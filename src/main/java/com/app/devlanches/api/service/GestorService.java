@@ -11,38 +11,38 @@ import com.app.devlanches.api.impl.IGestorService;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.repository.GestorRepository;
 
-
 @Service
-public class GestorService implements IGestorService{
+public class GestorService implements IGestorService {
 
 	@Autowired
-	private  GestorRepository gestorRepository;
-	
+	private GestorRepository gestorRepository;
 
 	@Override
-	public Gestor salvar(Gestor gestor) {
-		
-		if(verificaQuantidadeGestor(getAll())) {
+	public Gestor save(Gestor gestor) {
+
+		if (verificaQuantidadeGestor(findAll())) {
 			return gestorRepository.save(gestor);
 		}
 		return null;
 	}
-	
-	public boolean verificaQuantidadeGestor(List<Gestor> lista) {
-		
+
+	private boolean verificaQuantidadeGestor(List<Gestor> lista) {
+
 		int limite = lista.size();
-		
-		if(limite >= 1) {
+
+		if (limite >= 1) {
 			throw new ApiException("Registor de Gestor já atigu o limite.");
 		}
-		
+
 		return true;
 	}
-	
-	public List<Gestor> getAll() {
+
+	@Override
+	public List<Gestor> findAll() {
 		return gestorRepository.findAll();
 	}
-	
+
+	@Override
 	public Gestor findByEmail(String emial) {
 		return gestorRepository.findByEmail(emial).orElseThrow(() -> new EntityNotExist("Gestor não encontrado."));
 	}

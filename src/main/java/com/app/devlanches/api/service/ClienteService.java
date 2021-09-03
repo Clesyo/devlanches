@@ -8,50 +8,57 @@ import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.ApiException;
 import com.app.devlanches.api.exception.EntityNotExist;
+import com.app.devlanches.api.impl.IClienteService;
 import com.app.devlanches.api.models.Cliente;
 import com.app.devlanches.api.repository.ClienteRepository;
 
 @Service
-public class ClienteService {
+public class ClienteService implements IClienteService {
 
 	@Autowired
-	private  ClienteRepository clienteRepository;
+	private ClienteRepository clienteRepository;
 
+	@Override
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();
 	}
-	
-	public Cliente save(Cliente cliente) {
-		Cliente clienteByEmail = getClienteByEmail(cliente.getEmail());
 
-		if(clienteByEmail != null) {
+	@Override
+	public Cliente save(Cliente cliente) {
+		Cliente clienteByEmail = findByEmail(cliente.getEmail());
+
+		if (clienteByEmail != null) {
 			throw new ApiException("Email já está sendo usado.");
 		}
-		
+
 		return clienteRepository.save(cliente);
 	}
-	
-	public Cliente getClienteById (Long id) {
+
+	@Override
+	public Cliente findById(Long id) {
 		return findOrFail(id);
 	}
-	
+
+	@Override
 	public Cliente update(Long id, Cliente cliente) {
 		Cliente c = findOrFail(id);
 		BeanUtils.copyProperties(cliente, c, "id");
 		return clienteRepository.save(c);
 	}
-	
+
+	@Override
 	public void delete(Long id) {
 		Cliente cliente = findOrFail(id);
 		clienteRepository.delete(cliente);
 	}
-	
+
 	private Cliente findOrFail(Long id) {
 		return clienteRepository.findById(id).orElseThrow(() -> new EntityNotExist("Cliente não encontrado."));
 	}
-	
-	private Cliente getClienteByEmail(String email) {
-		return clienteRepository.findByEmail(email);
+
+	@Override
+	public Cliente findByEmail(String email) {
+		return clienteRepository.findByEmail(email).orElseThrow(() -> new EntityNotExist("Cliente não encontrado"));
 	}
 
 }

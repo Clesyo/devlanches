@@ -7,27 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.EntityNotExist;
+import com.app.devlanches.api.impl.IProdutoService;
 import com.app.devlanches.api.models.Produto;
 import com.app.devlanches.api.repository.ProdutoRepository;
 
 @Service
-public class ProdutoService {
+public class ProdutoService implements IProdutoService{
 
 	@Autowired
 	private  ProdutoRepository produtoRepository;
 
-	public List<Produto> getAll() {
+	@Override
+	public List<Produto> findAll() {
 		return produtoRepository.findAll();
 	}
 
-	public Produto getProdutoById(Long id) {
+	@Override
+	public Produto findById(Long id) {
 		return findOrFail(id);
 	}
 
+	@Override
 	public Produto save(Produto produto) {
 		return produtoRepository.save(produto);
 	}
 
+	@Override
 	public Produto update(Long id, Produto produto) {
 		Produto p = findOrFail(id);
 
@@ -35,6 +40,7 @@ public class ProdutoService {
 		return produtoRepository.save(p);
 	}
 
+	@Override
 	public void delete(Long id) {
 		Produto produto = findOrFail(id);
 		produtoRepository.delete(produto);

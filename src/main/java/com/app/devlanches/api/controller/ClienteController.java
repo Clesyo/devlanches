@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
+import com.app.devlanches.api.impl.IClienteService;
 import com.app.devlanches.api.models.Cliente;
-import com.app.devlanches.api.repository.ClienteRepository;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,20 +29,19 @@ import io.swagger.annotations.ApiResponses;
 public class ClienteController {
 
 	@Autowired
-	private ClienteRepository clienteRepository;
+	private IClienteService	 iClienteService;
 	
 	@GetMapping
 	@ApiOperation("Lista todos os clientes")
 	public List<Cliente> findAll() {
-		return clienteRepository.findAll();
+		return iClienteService.findAll();
 	}
 
 	@GetMapping("/{id}")
 	@ApiOperation("Busca um cliente pelo seu código ID")
 	@ApiResponse(code = 404, message = "Cliente não encontrado")
 	public Cliente getClienteById(@PathVariable Long id) {
-		return clienteRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não contrado"));
+		return iClienteService.findById(id);
 	}
 
 	@PostMapping
@@ -52,7 +50,7 @@ public class ClienteController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Cliente salvo com sucesso"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
 	public Cliente save(@RequestBody @Valid Cliente cliente) {
-		return clienteRepository.save(cliente);
+		return iClienteService.save(cliente);
 	}
 
 	@PutMapping("/{id}")
@@ -62,11 +60,7 @@ public class ClienteController {
 			@ApiResponse(code = 400, message = "Erro de validação"),
 			@ApiResponse(code = 404, message = "Cliente não encontrado") })
 	public Cliente update(@PathVariable Long id, @RequestBody @Valid Cliente cliente) {
-		return clienteRepository.findById(id).map(clienteExistente -> {
-			cliente.setId(clienteExistente.getId());
-			clienteRepository.save(cliente);
-			return clienteExistente;
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não contrado"));
+		return iClienteService.update(id, cliente);
 	}
 
 	@DeleteMapping("/{id}")
@@ -75,10 +69,7 @@ public class ClienteController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Cliente deletado com sucesso"),
 			@ApiResponse(code = 404, message = "Cliente não encontrado") })
 	public void delete(@PathVariable Long id) {
-		clienteRepository.findById(id).map(cliente -> {
-			clienteRepository.delete(cliente);
-			return cliente;
-		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não contrado"));
+		iClienteService.delete(id);
 	}
 
 }

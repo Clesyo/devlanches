@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.devlanches.api.impl.IProdutoService;
 import com.app.devlanches.api.models.Produto;
-import com.app.devlanches.api.service.ProdutoService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -29,19 +29,19 @@ import io.swagger.annotations.ApiResponses;
 public class ProdutoController {
 
 	@Autowired
-	private ProdutoService produtoService;
+	private IProdutoService iProdutoService;
 
 	@GetMapping
 	@ApiOperation("Lista todos os Produtos")
 	public List<Produto> getAll() {
-		return produtoService.getAll();
+		return iProdutoService.findAll();
 	}
 
 	@GetMapping("/{id}")
 	@ApiOperation("Busca um produto pelo seu código ID")
 	@ApiResponse(code = 404, message = "Produto não encontrado")
 	public Produto getProdutoById(@PathVariable Long id) {
-		return produtoService.getProdutoById(id);
+		return iProdutoService.findById(id);
 	}
 
 	@PostMapping
@@ -50,7 +50,7 @@ public class ProdutoController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Produto salvo com sucesso"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
 	public Produto save(@RequestBody @Valid Produto produto) {
-		return produtoService.save(produto);
+		return iProdutoService.save(produto);
 
 	}
 
@@ -61,7 +61,7 @@ public class ProdutoController {
 			@ApiResponse(code = 400, message = "Erro de validação"),
 			@ApiResponse(code = 404, message = "Produto não encontrado") })
 	public Produto update(@PathVariable Long id, @RequestBody @Valid Produto produto) {
-		return produtoService.update(id, produto);
+		return iProdutoService.update(id, produto);
 	}
 
 	@DeleteMapping("/{di}")
@@ -70,6 +70,6 @@ public class ProdutoController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Produto deletado com sucesso"),
 			@ApiResponse(code = 404, message = "Produto não encontrado") })
 	public void delete(@PathVariable Long id) {
-		produtoService.delete(id);
+		iProdutoService.delete(id);
 	}
 }

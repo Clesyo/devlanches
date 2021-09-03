@@ -21,11 +21,11 @@ import org.springframework.web.server.ResponseStatusException;
 import com.app.devlanches.api.configuration.security.auth.ApiUserDetailService;
 import com.app.devlanches.api.configuration.security.auth.jwt.JwtService;
 import com.app.devlanches.api.exception.PasswordInvalidException;
+import com.app.devlanches.api.impl.IGestorService;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.models.dto.CredencialDTO;
 import com.app.devlanches.api.models.dto.GestorDTO;
 import com.app.devlanches.api.models.dto.TokenDTO;
-import com.app.devlanches.api.repository.GestorRepository;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiResponses;
 public class GestorController {
 
 	@Autowired
-	private GestorRepository gestorRepository;
+	private IGestorService iGestorService;
 	@Autowired
 	private JwtService jwtService;
 	@Autowired
@@ -46,7 +46,7 @@ public class GestorController {
 	@GetMapping
 	@ApiOperation("Busca todos os gestores")
 	public List<GestorDTO> getAll() {
-		return gestorRepository.findAll().stream().map(gestor -> {
+		return iGestorService.findAll().stream().map(gestor -> {
 			return GestorDTO.convertToDto(gestor);
 		}).collect(Collectors.toList());
 	}
@@ -59,7 +59,7 @@ public class GestorController {
 	public GestorDTO salvar(@RequestBody @Valid Gestor gestor) {
 		String senha = encode.encode(gestor.getSenha());
 		gestor.setSenha(senha);
-		return GestorDTO.convertToDto(gestorRepository.save(gestor));
+		return GestorDTO.convertToDto(iGestorService.save(gestor));
 	}
 
 	@PostMapping("/auth")

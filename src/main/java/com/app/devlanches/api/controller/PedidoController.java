@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.devlanches.api.enums.StatusPedido;
+import com.app.devlanches.api.impl.IPedidoService;
 import com.app.devlanches.api.models.Pedido;
 import com.app.devlanches.api.models.dto.PedidoDTO;
 import com.app.devlanches.api.models.dto.PedidoDetalhadoDTO;
 import com.app.devlanches.api.models.dto.StatusPedidoDTO;
-import com.app.devlanches.api.service.PedidoService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,12 +34,12 @@ import io.swagger.annotations.ApiResponses;
 public class PedidoController {
 
 	@Autowired
-	private  PedidoService pedidoService;
+	private IPedidoService iPedidoService;
 	
 	@GetMapping
 	@ApiOperation("Lista todos os pedidos")
 	public List<PedidoDetalhadoDTO> getAll() {
-		List<Pedido> pedidos = pedidoService.findAll();
+		List<Pedido> pedidos = iPedidoService.findAll();
 		return pedidos.stream().map(pedido -> {
 			return PedidoDetalhadoDTO.convertPedido(pedido);
 		}).collect(Collectors.toList());
@@ -48,7 +48,7 @@ public class PedidoController {
 	@GetMapping("/cliente/{id}")
 	@ApiOperation("Lista todos pedidos de um cliente")
 	public List<PedidoDetalhadoDTO> getPedidoByIdCliente(@PathVariable @ApiParam("ID do cliente") Long id) {
-		List<Pedido> pedidos = pedidoService.getPedidoByIdCliente(id);
+		List<Pedido> pedidos = iPedidoService.findByIdCliente(id);
 		
 		return pedidos.stream().map(pedido -> {
 			return PedidoDetalhadoDTO.convertPedido(pedido);
@@ -60,7 +60,7 @@ public class PedidoController {
 	@ApiResponses({ @ApiResponse(code = 201, message = "Pedido criado com sucesso"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
 	public PedidoDetalhadoDTO save(@RequestBody @Valid PedidoDTO pedido) {
-		return PedidoDetalhadoDTO.convertPedido(pedidoService.save(pedido));
+		return PedidoDetalhadoDTO.convertPedido(iPedidoService.save(pedido));
 	}
 
 	@PatchMapping("/{id}")
@@ -70,7 +70,7 @@ public class PedidoController {
 			@ApiResponse(code = 404, message = "Pedido não encontrado"),
 			@ApiResponse(code = 400, message = "Erro de validação") })
 	public void updateStatus(@PathVariable @ApiParam("ID do pedido") Long id, @RequestBody StatusPedidoDTO status) {
-		pedidoService.mudaStatuPedido(id, StatusPedido.valueOf(status.getStatus().toUpperCase()));
+		iPedidoService.changeStatusPedido(id, StatusPedido.valueOf(status.getStatus().toUpperCase()));
 	}
 	
 	@PatchMapping("/{id}/cancelar")
@@ -79,7 +79,7 @@ public class PedidoController {
 	@ApiResponses({ @ApiResponse(code = 204, message = "Pedido alterado com sucesso"),
 		@ApiResponse(code = 404, message = "Pedido não encontrado")})
 	public void updateStatus(@PathVariable @ApiParam("ID do pedido") Long id) {
-		pedidoService.cancelaPedido(id);
+		iPedidoService.cancelPedido(id);
 	}
 
 }
