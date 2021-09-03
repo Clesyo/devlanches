@@ -7,17 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.app.devlanches.api.exception.ApiException;
 import com.app.devlanches.api.exception.EntityNotExist;
+import com.app.devlanches.api.impl.IGestorService;
 import com.app.devlanches.api.models.Gestor;
 import com.app.devlanches.api.repository.GestorRepository;
 
 
 @Service
-public class GestorService {
+public class GestorService implements IGestorService{
 
 	@Autowired
 	private  GestorRepository gestorRepository;
 	
 
+	@Override
 	public Gestor salvar(Gestor gestor) {
 		
 		if(verificaQuantidadeGestor(getAll())) {

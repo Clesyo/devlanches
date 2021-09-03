@@ -14,10 +14,6 @@ public class ItemPedidoService {
 	@Autowired
 	private  ItemPedidoRepository itemPedidoRepository;
 	
-	public ItemPedidoService(ItemPedidoRepository itemPedidoRepository) {
-		this.itemPedidoRepository = itemPedidoRepository;
-	}
-
 	public ItemPedido save(ItemPedido itemPedido) {
 		return itemPedidoRepository.save(itemPedido);
 	}

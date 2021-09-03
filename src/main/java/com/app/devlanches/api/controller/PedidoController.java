@@ -36,10 +36,6 @@ public class PedidoController {
 	@Autowired
 	private  PedidoService pedidoService;
 	
-	public PedidoController(PedidoService pedidoService) {
-		this.pedidoService = pedidoService;
-	}
-
 	@GetMapping
 	@ApiOperation("Lista todos os pedidos")
 	public List<PedidoDetalhadoDTO> getAll() {

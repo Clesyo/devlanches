@@ -19,10 +19,6 @@ public class ApiUserDetailService implements UserDetailsService {
 	private GestorService gestorService;
 	private PasswordEncoder encode = new BCryptPasswordEncoder();
 
-	public ApiUserDetailService(GestorService gestorService) {
-		this.gestorService = gestorService;
-	}
-
 	public UserDetails authenticate(Gestor gestor) {
 
 		UserDetails userLogin = loadUserByUsername(gestor.getEmail());
@@ -36,7 +32,6 @@ public class ApiUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
 		Gestor gestor = gestorService.findByEmail(email);
 
 		return UserCustom.builder().password(gestor.getSenha()).username(gestor.getEmail()).roles("ADMIN").build();

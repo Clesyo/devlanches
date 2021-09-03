@@ -23,6 +23,12 @@ public class JwtService {
 	@Value("${security.jwt.subscription-key}")
 	private String signKey;
 
+	public JwtService(@Value(value = "${security.jwt.expiration}") String expiration,
+			@Value(value = "${security.jwt.subscription-key}") String signKey) {
+		this.expiration = expiration;
+		this.signKey = signKey;
+	}
+
 	public String gerarToken(Gestor gestor) {
 		Long expiracao = Long.valueOf(this.expiration);
 		LocalDateTime horaExpiracao = LocalDateTime.now().plusMinutes(expiracao);

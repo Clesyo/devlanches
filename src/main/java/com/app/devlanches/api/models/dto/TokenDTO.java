@@ -6,7 +6,6 @@ public class TokenDTO {
 	private String token;
 
 	public TokenDTO() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public TokenDTO(String login, String token) {

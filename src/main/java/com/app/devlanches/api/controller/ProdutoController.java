@@ -31,10 +31,6 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 
-	public ProdutoController(ProdutoService produtoService) {
-		this.produtoService = produtoService;
-	}
-
 	@GetMapping
 	@ApiOperation("Lista todos os Produtos")
 	public List<Produto> getAll() {

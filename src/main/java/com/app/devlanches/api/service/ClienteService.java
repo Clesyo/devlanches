@@ -16,10 +16,6 @@ public class ClienteService {
 
 	@Autowired
 	private  ClienteRepository clienteRepository;
-	
-	public ClienteService(ClienteRepository clienteRepository) {
-		this.clienteRepository = clienteRepository;
-	}
 
 	public List<Cliente> findAll() {
 		return clienteRepository.findAll();

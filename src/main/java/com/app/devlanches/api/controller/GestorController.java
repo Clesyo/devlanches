@@ -39,16 +39,10 @@ public class GestorController {
 	private GestorRepository gestorRepository;
 	@Autowired
 	private JwtService jwtService;
+	@Autowired
 	private ApiUserDetailService userDetailService;
 	private BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
-	
-	public GestorController(GestorRepository service, ApiUserDetailService userDetailService) {
-		this.gestorRepository = service;
-		this.userDetailService = userDetailService;
-	}
 
-	
-	
 	@GetMapping
 	@ApiOperation("Busca todos os gestores")
 	public List<GestorDTO> getAll() {
@@ -71,7 +65,7 @@ public class GestorController {
 	@PostMapping("/auth")
 	public TokenDTO authentication(@RequestBody CredencialDTO credencial) {
 		try {
-			Gestor gestor = new Gestor(credencial.getLogin(),credencial.getPassword());
+			Gestor gestor = new Gestor(credencial.getLogin(), credencial.getPassword());
 			userDetailService.authenticate(gestor);
 			String token = jwtService.gerarToken(gestor);
 			return new TokenDTO(gestor.getEmail(), token);

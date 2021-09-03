@@ -32,10 +32,6 @@ public class ClienteController {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
-	public ClienteController(ClienteRepository clienteRepository) {
-		this.clienteRepository = clienteRepository;
-	}
-
 	@GetMapping
 	@ApiOperation("Lista todos os clientes")
 	public List<Cliente> findAll() {
@@ -45,7 +41,7 @@ public class ClienteController {
 	@GetMapping("/{id}")
 	@ApiOperation("Busca um cliente pelo seu código ID")
 	@ApiResponse(code = 404, message = "Cliente não encontrado")
-	public Cliente getClienteById(Long id) {
+	public Cliente getClienteById(@PathVariable Long id) {
 		return clienteRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não contrado"));
 	}
