@@ -24,7 +24,7 @@ public class ProdutoService implements IProdutoService{
 
 	@Override
 	public Produto findById(Long id) {
-		return findOrFail(id);
+		return produtoRepository.findById(id).orElseThrow(() -> new EntityNotExist("Produto não encontrado"));
 	}
 
 	@Override
@@ -34,19 +34,21 @@ public class ProdutoService implements IProdutoService{
 
 	@Override
 	public Produto update(Long id, Produto produto) {
-		Produto p = findOrFail(id);
+		return produtoRepository.findById(id).map(p -> {
+			produto.setId(p.getId());
+			return produtoRepository.save(produto);
+		})
+				.orElseThrow(() -> new EntityNotExist("Produto não encontrado"));
 
-		BeanUtils.copyProperties(produto, p, "id");
-		return produtoRepository.save(p);
 	}
 
 	@Override
 	public void delete(Long id) {
-		Produto produto = findOrFail(id);
+		Produto produto = produtoRepository.findById(id).map(p -> {
+			 return p;
+		}).orElseThrow(() -> new EntityNotExist("Produto não encontrado"));
+
 		produtoRepository.delete(produto);
 	}
 
-	private Produto findOrFail(Long id) {
-		return produtoRepository.findById(id).orElseThrow(() -> new EntityNotExist("Produto não encontrado"));
-	}
 }

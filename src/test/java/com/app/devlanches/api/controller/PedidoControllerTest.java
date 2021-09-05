@@ -55,7 +55,7 @@ class PedidoControllerTest {
 
 	@Test
 	void createPedidoSucesso() throws JsonProcessingException, Exception {
-		Produto produto = ProdutoMock.getData();
+		Produto produto = ProdutoMock.getDataTwo();
 		Optional<Cliente> cliente = ClienteMock.getData();
 		when(produtoService.findById(produto.getId())).thenReturn(produto);
 		when(clienteService.findById(cliente.get().getId())).thenReturn(ClienteMock.getData().get());
@@ -67,7 +67,7 @@ class PedidoControllerTest {
 	@Test
 	@DisplayName(value = "Restorna exceção com pedido sem items")
 	public void failCreatePedidoWithoutItens() throws JsonProcessingException, Exception {
-		Produto produto = ProdutoMock.getData();
+		Produto produto = ProdutoMock.getDataOne();
 		Optional<Cliente> cliente = ClienteMock.getData();
 		when(produtoService.findById(produto.getId())).thenReturn(produto);
 		when(clienteService.findById(cliente.get().getId())).thenReturn(

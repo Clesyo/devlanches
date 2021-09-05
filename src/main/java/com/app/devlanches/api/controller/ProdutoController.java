@@ -40,7 +40,7 @@ public class ProdutoController {
 	@GetMapping("/{id}")
 	@ApiOperation("Busca um produto pelo seu código ID")
 	@ApiResponse(code = 404, message = "Produto não encontrado")
-	public Produto getProdutoById(@PathVariable Long id) {
+	public Produto findById(@PathVariable Long id) {
 		return iProdutoService.findById(id);
 	}
 
@@ -57,17 +57,17 @@ public class ProdutoController {
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@ApiOperation("Altera um Produto")
-	@ApiResponses({ @ApiResponse(code = 201, message = "Produto alterado com sucesso"),
+	@ApiResponses({ @ApiResponse(code = 204, message = "Produto alterado com sucesso"),
 			@ApiResponse(code = 400, message = "Erro de validação"),
 			@ApiResponse(code = 404, message = "Produto não encontrado") })
 	public Produto update(@PathVariable Long id, @RequestBody @Valid Produto produto) {
 		return iProdutoService.update(id, produto);
 	}
 
-	@DeleteMapping("/{di}")
+	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@ApiOperation("Deleta um Cliente")
-	@ApiResponses({ @ApiResponse(code = 201, message = "Produto deletado com sucesso"),
+	@ApiResponses({ @ApiResponse(code = 204, message = "Produto deletado com sucesso"),
 			@ApiResponse(code = 404, message = "Produto não encontrado") })
 	public void delete(@PathVariable Long id) {
 		iProdutoService.delete(id);

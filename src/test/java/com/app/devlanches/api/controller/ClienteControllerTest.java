@@ -23,6 +23,7 @@ import com.app.devlanches.api.configuration.security.auth.jwt.JwtService;
 import com.app.devlanches.api.controller.mock.ClienteMock;
 import com.app.devlanches.api.controller.mock.GestorMock;
 import com.app.devlanches.api.service.ClienteService;
+import com.app.devlanches.api.service.GestorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +48,8 @@ class ClienteControllerTest {
 
 	@MockBean
 	private ClienteService clienteService;
+	@MockBean
+	private GestorService gestorService;
 
 	@BeforeAll
 	public void setup() {
@@ -65,8 +68,9 @@ class ClienteControllerTest {
 	@Test
 	@DisplayName(value = "Retorna um cliente através do seu codigo ID")
 	public void returnClienteById() throws Exception {
+		when(gestorService.findByEmail(GestorMock.allData().getEmail())).thenReturn(GestorMock.allData());
 		assertNotNull(token);
-		mockMvc.perform(get(URL_PARAM, 1L).header("Authorization", "Bearer "+token)).andExpect(status().isOk());
+		mockMvc.perform(get(URL_PARAM, 1L).header("Authorization", "Bearer "+token).contentType(MediaType.APPLICATION_JSON_UTF8)).andExpect(status().isOk());
 		
 	}
 
