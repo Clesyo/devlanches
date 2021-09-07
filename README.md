@@ -14,12 +14,36 @@
 
 ### Como rodar
 * Para download do projeto siga o passa abaixo:
-```bash
-# Clone este repositório
-$ git clone https://github.com/Clesyo/devlanches.git
-```
+`````bash
+git clone https://github.com/Clesyo/devlanches.git
+`````
 * Usando as IDEs Eclipse ou STS - SpringToolSuite, faça a importação do projeto.
 * Configura o arquivo **application.properties** com as informação da sua base de dados.
+
+### Testando a aplicação usando a Swagger
+
+* Execute seu projeto F11, após subir a aplicação acesse o endereço abaixo com com seu navegador
+
+`````bash
+http://localhost:8080/swagger-ui.html
+`````
+### Gerando o arquivo JAR
+
+* Abra o CMD no raiz do projeto e execute o seguinte comando:
+
+  ````bash
+  mvn clean packge
+  ````
+
+* Após a concluir a execução, consulte a pasta **target** para visualizar o arquivo .jar.
+
+### Executando o arquivo JAR
+
+* Acesse a pasta **target**, e execute o comando abaixo:
+
+  ````bash
+  java -jar nomedoarquivo.jar
+  ````
 ### 🛠 Tecnologias
 
 As seguintes ferramentas foram usadas na construção do projeto:
@@ -28,7 +52,6 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Spring Data](https://spring.io/projects/spring-data-jpa)
 - [Spring Security](https://spring.io/projects/spring-security)
 - [JWT](https://jwt.io/)
-- [Lombok](https://projectlombok.org/)
 - [Swagger2](https://swagger.io/)
 
 ## Autor
