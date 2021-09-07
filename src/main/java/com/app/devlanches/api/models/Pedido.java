@@ -31,11 +31,13 @@ public class Pedido {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Status do pedido não definido.")
-	@ApiModelProperty("Status do pedido: PENDENTE, ATENDIMENTO, FINALIZADO, CANCELADO")
+	@ApiModelProperty("Status do pedido: PENDENTE, ATENDIMENTO, FINALIZADO, CANCELADO, PAGO")
 	private StatusPedido status;
 	@Column(nullable = false)
 	@NotNull(message = "Total do pedido não calculado.")
 	private BigDecimal total;
+	@Column(nullable = false)
+	private boolean pago;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
@@ -44,6 +46,10 @@ public class Pedido {
 	@JsonIgnore
 	@OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> itemPedidos;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "pedido")
+	private List<Pagamento> pagamentos;
 
 	public Pedido() {
 	}

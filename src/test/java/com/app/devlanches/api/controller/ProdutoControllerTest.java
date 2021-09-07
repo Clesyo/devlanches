@@ -1,11 +1,10 @@
 package com.app.devlanches.api.controller;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -20,14 +19,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.app.devlanches.api.configuration.security.auth.jwt.JwtService;
-import com.app.devlanches.api.controller.mock.ClienteMock;
 import com.app.devlanches.api.controller.mock.GestorMock;
 import com.app.devlanches.api.controller.mock.ProdutoMock;
-import com.app.devlanches.api.exception.EntityNotExist;
 import com.app.devlanches.api.service.GestorService;
 import com.app.devlanches.api.service.ProdutoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -61,30 +56,35 @@ class ProdutoControllerTest {
 	@BeforeAll
 	public void setup() {
 		when(produtoService.findById(ProdutoMock.getDataOne().getId())).thenReturn(ProdutoMock.getDataOne());
+		token = jwtService.gerarToken(GestorMock.allData());
 	}
 
 	@Test
 	@DisplayName(value = "Produto quando criado retorna sucesso")
 	void createProdutoSuccess() throws JsonProcessingException, Exception {
-		token = jwtService.gerarToken(GestorMock.allData());
 		when(gestorService.findByEmail(GestorMock.allData().getEmail())).thenReturn(GestorMock.allData());
 		mockMvc.perform(post(URL_PRODUTO).content(object.writeValueAsString(ProdutoMock.getDataOne()))
-				.header(HEADER_PREFIX, "Bearer " + token).contentType(MediaType.APPLICATION_PROBLEM_JSON_UTF8))
+				.header(HEADER_PREFIX, "Bearer " + token).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
 				.andExpect(status().isCreated());
 	}
 
 	@Test
 	@DisplayName(value = "Returna produto pelo codigo ID ")
 	void returnProdutoById() throws Exception {
-		token = jwtService.gerarToken(GestorMock.allData());
 		when(gestorService.findByEmail(GestorMock.allData().getEmail())).thenReturn(GestorMock.allData());
 		mockMvc.perform(get(URL_PRODUTO_ID, 1L).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header(HEADER_PREFIX,
 				"Bearer " + token)).andExpect(status().isOk());
 	}
 	@Test
+	@DisplayName(value = "Altera produto pelo codigo ID ")
+	void updateProdutoById() throws Exception {
+		when(gestorService.findByEmail(GestorMock.allData().getEmail())).thenReturn(GestorMock.allData());
+		mockMvc.perform(put(URL_PRODUTO_ID, 1L).content(object.writeValueAsString(ProdutoMock.getDataOne())).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header(HEADER_PREFIX,
+				"Bearer " + token)).andExpect(status().isNoContent());
+	}
+	@Test
 	@DisplayName(value = "Detela um produto pelo seu cogido ID ")
 	void deleteProdutoById() throws Exception {
-		token = jwtService.gerarToken(GestorMock.allData());
 		when(gestorService.findByEmail(GestorMock.allData().getEmail())).thenReturn(GestorMock.allData());
 		mockMvc.perform(delete(URL_PRODUTO_ID, 1L).contentType(MediaType.APPLICATION_JSON_UTF8_VALUE).header(HEADER_PREFIX,
 				"Bearer " + token)).andExpect(status().isNoContent());

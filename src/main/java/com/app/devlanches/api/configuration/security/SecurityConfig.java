@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().authorizeRequests().antMatchers("/").permitAll()
 				.antMatchers(HttpMethod.POST, "/gestor/**").permitAll().antMatchers(HttpMethod.POST, "/cliente/**")
 				.permitAll().antMatchers("/pedido/**").permitAll().antMatchers("/produto/**").hasRole("ADMIN")
-				.anyRequest().authenticated().and().sessionManagement()
+				.antMatchers("/caixa/**").hasRole("ADMIN").anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
